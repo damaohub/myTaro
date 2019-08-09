@@ -1,0 +1,66 @@
+/* === Grid === */
+@import "./minix.less";
+@import url("../app-vars.less");
+@grid-gap: 30px;
+
+@cols: 5, 10, 15, 20, 25, 30, 100/3, 35, 40, 45, 50, 55, 60, 65, 100*(2/3), 70, 75, 80, 85, 90, 95, 100;
+@counter: length(@cols);
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  --cols-per-row: 1;
+  > div[class*="col-"], > view[class*="col-"],> button[class*="col-"], > .col {
+    box-sizing: border-box;
+    width: calc((100% - @grid-gap * (var(--cols-per-row) - 1)) / var(--cols-per-row));
+  }
+  &.no-gap {
+    @grid-gap: 0px;
+  }
+
+  each(@cols, {
+    @className: floor(@value);
+    @n: 100/@value;
+    .col-@{className} {
+        --cols-per-row: @n;
+    }
+  });
+  // each(@cols, {
+  //   .col:nth-last-child(@{index}), .col:nth-last-child(@{index}) ~.col {
+  //     --cols-per-row: @index;
+  //      font-size: 28px;
+  //   }
+  // });
+
+
+  @media (min-width: 768px) {
+    each(@cols, {
+      @className: floor(@value);
+      @n: 100/@value;
+      .tablet-@{className} {
+        --cols-per-row: @n;
+      }
+    });
+    // each(@cols, {
+    //   .tablet-auto:nth-last-child(@{index}), .tablet-auto:nth-last-child(@{index}) ~ .tablet-auto {
+    //     @cols-per-row: @index;
+    //   }
+    // });
+  }
+  // @media (min-width: 1025px) {
+  //   each(@cols, {
+  //     @className: floor(@value);
+  //     @n: 100/@value;
+  //     .desktop-@{className} {
+  //       @cols-per-row: @n;
+  //     }
+  //   });
+    // each(@cols, {
+    //   .desktop-auto:nth-last-child(@{index}), .desktop-auto:nth-last-child(@{index}) ~ .desktop-auto {
+    //     @cols-per-row: @index;
+    //   }
+    // });
+  // }
+}

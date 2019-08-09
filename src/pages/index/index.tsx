@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, Button  } from '@tarojs/components'
 import './index.less'
 
 export default class Index extends Component {
@@ -28,7 +28,11 @@ export default class Index extends Component {
   render () {
     return (
       <View className='index page'>
-        <View className="block"><Text>19082期</Text><Text>07-17（周三）</Text><Text>20:00截至购买</Text></View>
+        <View className="padding-half bg-color-white"><Text>19082期</Text><Text>07-17（周三）</Text><Text>20:00截至购买</Text></View>
+        <View className="row margin-half">
+            <Button className="button col-50" type="primary">手动输入</Button>
+            <Button className="button col-50" type="primary">图像输入</Button> 
+        </View> 
         <View className="card">
           <View className="card-content">
             <View className="list media-list links-list no-safe-areas">

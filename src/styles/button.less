@@ -1,0 +1,228 @@
+    @import "./minix.less";
+    @import url("../app-vars.less");
+
+    @button-font-size: 28px;
+    @button-min-width: 64px;
+    @button-bg-color: transparent;
+    @button-border-width: 0.1px;
+    
+    @button-text-color: @theme-color;
+    @button-pressed-text-color: @button-text-color;
+    @button-border-color: @theme-color;
+    @button-fill-text-color: #fff;
+    @button-fill-bg-color: @theme-color;
+    @button-outline-border-color: @theme-color;
+    
+    @button-raised-box-shadow: 0 2px 6px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
+    @button-raised-pressed-box-shadow: 0 6px 12px rgba(0,0,0,0.16), 0 6px 12px rgba(0,0,0,0.23);
+    @segmented-raised-divider-color: rgba(0,0,0,0.1);
+
+    @button-height: 58px;
+  @button-padding-horizontal: 20px;
+  @button-border-radius: 10px;
+  @button-font-weight: 400;
+  @button-letter-spacing: 0;
+  @button-text-transform: none;
+ 
+  @button-pressed-bg-color: rgba(@theme-color-rgb), .15;
+  @button-fill-pressed-bg-color: @theme-color;
+ 
+  @button-outline-border-width: 2px;
+  @button-large-height: 88px;
+  @button-large-font-size: 34px;
+  @button-large-font-weight: 400;
+  @button-small-height: 52px;
+  @button-small-font-size: 26px;
+  @button-small-font-weight: 600;
+  @button-small-text-transform: uppercase;
+  @button-small-outline-border-width: 4px;
+
+  @button-padding-vertical: 0px;
+  @button-box-shadow: 0 0px 0px rgba(0,0,0,0.12), 0 0px 0px rgba(0,0,0,0.24);
+button {
+  appearance: none;
+  width: 100%;
+  
+}
+.button {
+    transition-duration: 100ms;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  appearance: none;
+  background: none;
+  margin: 0;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  cursor: pointer;
+  outline: 0;
+  box-sizing: border-box;
+  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+  border: @button-border-width, 0px solid @button-border-color;
+  font-size: @button-font-size;
+  color: @button-text-color;
+  height: @button-height;
+  line-height: calc(@button-height - @button-border-width * 2);
+  padding: @button-padding-vertical @button-padding-horizontal;
+  border-radius: @button-border-radius;
+  min-width: @button-min-width;
+  font-weight: @button-font-weight;
+  letter-spacing: @button-letter-spacing;
+  text-transform: @button-text-transform;
+  background-color: @button-bg-color;
+  box-shadow: @button-box-shadow;
+  &.active-state {
+    background-color: rgba(@theme-color-rgb, 0.15);
+    color: @button-pressed-text-color;
+  }
+  input[type="submit"]&, input[type="button"]&{
+    width: 100%;
+  }
+
+  > i + span,
+  > span + span,
+  > span + i,
+  > i + i {
+      margin-left: 4px;
+  }
+}
+.subnavbar .button,
+.navbar .button,
+.toolbar .button,
+.searchbar .button,
+.appbar .button {
+  color: @button-text-color;
+}
+
+.button-round,
+.ios .button-round-ios,
+.md .button-round-md,
+.aurora .button-round-aurora {
+  @button-border-radius: @button-height;
+}
+.button-fill,
+.button-fill-ios,
+.button-fill-md,
+.aurora .button-fill-aurora,
+.button-active,
+.button.tab-link-active {
+    background-color: @button-fill-bg-color;
+    color: @button-fill-text-color;
+}
+.button-fill,
+ .button-fill-ios,
+.button-fill-md {
+    background-color: @button-fill-pressed-bg-color;
+}
+.button-active,
+.button.tab-link-active {
+    background-color: @button-bg-color;
+}
+
+.button-outline,
+.button-outline-ios,
+.button-outline-md {
+  color: @theme-color;
+  border-width: @button-outline-border-width;
+}
+
+.button-large,
+.button-large-ios,
+.button-large-md {
+  @button-height: @button-large-height;
+  @button-font-size: @button-large-font-size;
+  @button-font-weight: @button-large-font-weight;
+}
+.button-small,
+.button-small-ios,
+.button-small-md {
+  @button-outline-border-width: @button-small-outline-border-width;
+  @button-height: @button-small-height;
+  @button-font-size: @button-small-font-size;
+  @button-font-weight: @button-small-font-weight;
+  @button-text-transform: @button-small-text-transform;
+}
+.button-small.button-fill,
+.button-small-ios.button-fill,
+.button-small.button-fill-ios {
+  @button-border-width: @button-small-outline-border-width;
+  @button-pressed-text-color: @theme-color;
+  @button-pressed-bg-color: transparent;
+}
+
+.segmented {
+  align-self: center;
+  display: flex;
+  flex-wrap: nowrap;
+  border-radius: @button-border-radius;
+  box-shadow: @button-box-shadow;
+  .button, button {
+    width: 100%;
+    flex-shrink: 1;
+    min-width: 0;
+    border-radius: 0;
+  }
+    .button:first-child {
+        border-radius: @button-border-radius 0 0 @button-border-radius;
+    }
+    .button:not(.button-outline):first-child {
+        border-left: none;
+    }
+    .button.button-outline {
+        &:nth-child(n + 2) {
+        border-left: none;
+        }
+    }
+    .button:last-child {
+        border-radius: 0 @button-border-radius @button-border-radius 0;
+    }
+    .button-round:first-child {
+        border-radius: @button-height 0 0 @button-height;
+    }
+    .button-round:last-child {
+        border-radius: 0 @button-height @button-height 0;
+    }
+
+ 
+  .button:first-child:last-child {
+    border-radius: @button-border-radius;
+  }
+}
+.segmented-round,
+.ios .segmented-round-ios,
+.md .segmented-round-md,
+.aurora .segmented-round-aurora{
+  border-radius: @button-height;
+}
+
+.segmented-raised,
+.ios .segmented-raised-ios,
+.md .segmented-raised-md,
+.aurora .segmented-raised-aurora {
+  box-shadow: @button-raised-box-shadow;
+  .button:not(.button-outline) {
+
+    border-left: 1px solid @segmented-raised-divider-color;
+    
+   
+  }
+}
+
+// Raised
+.button-raised,
+.ios .button-raised-ios,
+.md .button-raised-md,
+.aurora .button-raised-aurora {
+  @button-box-shadow: @button-raised-box-shadow;
+  &.active-state {
+    @button-box-shadow: @button-raised-pressed-box-shadow;
+  }
+}
+.subnavbar .segmented {
+  width: 100%;
+}

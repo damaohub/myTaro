@@ -20,6 +20,7 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/pickNumbers/index',
       'pages/index/index'
     ],
     window: {
