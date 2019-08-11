@@ -2,12 +2,12 @@ import Taro, { Component, Config } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import './pickNumber.less';
 
-const getArray = (len:number):string[] => {
-    if (len == 0) return ['0']; 
-    const arr:string[] = [];
+const getArray = (len:number):{num:string, active:boolean}[] => {
+    if (len == 0) return [{num: '0', active: false}]; 
+    const arr:{num:string,active:false}[] = [];
     for(let i = 1; i < len+1; i ++ ) {
         const str:string  =  ('' + i).length < 2 ? '0' + i : i.toString();
-        arr.push(str);
+        arr.push({num: str, active: false});
     }
     return arr;
 }
@@ -16,7 +16,10 @@ export default class Index extends Component {
     config: Config = {
         navigationBarTitleText: '首页'
     }
-    
+    state = {
+        red: getArray(35),
+        blue: []
+    }
     componentWillMount () { }
 
     componentDidMount () { }
@@ -27,17 +30,31 @@ export default class Index extends Component {
   
     componentDidHide () { }
 
+    onCheck = (i:number,type:number):any => {
+        console.log(i);
+        const {red} = this.state;
+        switch (type){
+            case 1:
+            red[i].active = !red[i].active;
+            this.setState({
+                red
+            })
+        }
+    }
     render () {
-        const red = getArray(36);
+        const { red } = this.state;
+        console.log(red)
         return (
             <View className='pick-numbers page'>
                 <View className="padding-half bg-color-white"><Text>19082期</Text><Text>07-17（周三）</Text><Text>20:00截至购买</Text></View>
                 <View className="padding-half bg-color-white margin-vertical-half">19082期 开奖结果：04 13 20 26 28 03 12</View>
                 <View>
                     <View>至少选择5个红球， 2个蓝球</View>
-                    <View className="row per-6 justify-content-flex-start">
+                    <View className="row per-6 justify-content-flex-start bg-color-white">
                     {red.map((item, index) => (
-                        <Text key={`${index}`} className="col text-align-center">{item}</Text>
+                        <View className="col text-align-center">
+                            <Text onClick={() => this.onCheck(index, 1)} key={`${index}`} className={item.active?"num active":"num color-red"}>{item.num}</Text>
+                        </View> 
                     ))
                     }
                         
