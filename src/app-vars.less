@@ -1,11 +1,23 @@
+@safe-area-right: 0.1px;
+@safe-area-left: 0.1px;
+@safe-area-bottom:0.1px;
+@safe-area-top:0.1px;
+@safe-area-outer-left: 0.1px;
+@safe-area-outer-right: 0.1px;
 
+
+@navbar-height: 88px;
+@navbar-large-title-height: 104px;
+
+/*====================
+  Color Themes
+  ==================== */
 @theme-color: #007aff;
 @themeColor: #007aff;
 @themeColorRed: red(@themeColor);
 @themeColorGreen: green(@themeColor);
 @themeColorBlue: blue(@themeColor);
 @theme-color-rgb: @themeColorRed, @themeColorGreen, @themeColorBlue;
-
 @colors: {
     red: #ff3b30;
     green: #4cd964;
@@ -24,11 +36,33 @@
     black: #000000;
   };
 
-@font-size: 28px;
-@font-family: -apple-system, SF Pro Text, SF UI Text, system-ui, Helvetica Neue, Helvetica, Arial, sans-serif;
-@navbar-large-title-height: 104px;
-@safe-area-right: 0.1px;
-@safe-area-left: 0.1px;
-@safe-area-outer-left: 0.1px;
-@safe-area-outer-right: 0.1px;
+  /*====================
+  Fonts
+  ==================== */
+  @font-size: 28px;
+  @font-family: -apple-system, SF Pro Text, SF UI Text, system-ui, Helvetica Neue, Helvetica, Arial, sans-serif;
+  @text-color: #000;
+  @line-height: 1.4;
 
+/*====================
+  Bars
+  ==================== */
+  @bars-bg-image: none;
+  @bars-border-color: #c4c4c4;
+  @bars-bg-color: #f7f7f8;
+  @bars-bg-color-rgb: 247, 247, 248;
+  @bars-text-color: #000;
+  @bars-shadow-bottom-image: linear-gradient(to bottom,
+    rgba(0,0,0,0.25) 0%,
+    rgba(0,0,0,0.08) 40%,
+    rgba(0,0,0,0.04) 50%,
+    rgba(0,0,0,0) 90%,
+    rgba(0,0,0,0) 100%
+  );
+  @bars-shadow-top-image: linear-gradient(to top,
+    rgba(0,0,0,0.25) 0%,
+    rgba(0,0,0,0.08) 40%,
+    rgba(0,0,0,0.04) 50%,
+    rgba(0,0,0,0) 90%,
+    rgba(0,0,0,0) 100%
+  );

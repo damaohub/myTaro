@@ -17,6 +17,32 @@ html, body{
     font-family: @font-family
   }
  
+  .link,
+.tab-link {
+  display: inline-flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  transform: translate3d(0, 0, 0);
+  z-index: 1;
+}
+.link {
+    color: @colors[blue];
+    transition: opacity 300ms;
+    &.active-state {
+        opacity: 0.3;
+        transition-duration: 0ms;
+    }
+  i + span,
+  i + i,
+  span + i,
+  span + span {
+    margin-left: 4px;
+  }
+}
+
 .block{
   background: #fff;
   box-sizing: border-box;

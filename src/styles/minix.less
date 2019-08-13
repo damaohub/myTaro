@@ -5,53 +5,7 @@
   @media (min-resolution: 3dppx) {
    @device-pixel-ratio: 6;
   }
-// RTL, LTR
-.ltr(@ruleset) {
-    & when not (@rtl) {
-      @ruleset();
-    }
-  }
-  .rtl(@ruleset) {
-    & when (@rtl) {
-      @ruleset();
-    }
-  }
-  .if-ios-theme(@ruleset) {
-    & when (@includeIosTheme) {
-      @ruleset();
-    }
-  }
-  .if-md-theme(@ruleset) {
-    & when (@includeMdTheme) {
-      @ruleset();
-    }
-  }
-  .if-aurora-theme(@ruleset) {
-    & when (@includeAuroraTheme) {
-      @ruleset();
-    }
-  }
-  .ios-vars(@ruleset) {
-    & when (@includeIosTheme) {
-      .ios {
-        @ruleset();
-      }
-    }
-  }
-  .md-vars(@ruleset) {
-    & when (@includeMdTheme) {
-      .md {
-        @ruleset();
-      }
-    }
-  }
-  .aurora-vars(@ruleset) {
-    & when (@includeAuroraTheme) {
-      .aurora {
-        @ruleset();
-      }
-    }
-  }
+ 
   // Scrollable
   .scrollable() {
     will-change: scroll-position;
