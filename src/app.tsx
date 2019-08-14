@@ -1,13 +1,23 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import Index from './pages/index'
 import { Provider } from '@tarojs/redux';
+import models from './models';
+import dva from './utils/dva';
+
 import './app.less'
+
+const dvaApp = dva.createApp({
+  initialState: {test:'test11'},
+  models: models,
+});
+const store = dvaApp.getStore();
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
-// if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
-//   require('nerv-devtools')
-// }
+if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
+  require('nerv-devtools')
+}
+
 
 class App extends Component {
 
@@ -43,7 +53,10 @@ class App extends Component {
   // 请勿修改此函数
   render () {
     return (
-      <Index />
+      <Provider store={store}>
+        <Index />
+      </Provider> 
+      
     )
   }
 }

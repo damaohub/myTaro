@@ -1,5 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro';
 import { View, Text, Button } from '@tarojs/components';
+import { connect } from '@tarojs/redux';
 import { mathAccount } from '../../utils/utils';
 import './pickNumber.less';
 
@@ -13,6 +14,10 @@ const getArray = (len:number):{num:string, active:boolean}[] => {
     return arr;
 }
 
+@connect(({ common, loading }) => ({
+    ...common,
+    ...loading,
+  }))
 export default class Index extends Component {
     config: Config = {
         navigationBarTitleText: '首页'
@@ -73,12 +78,14 @@ export default class Index extends Component {
     onSure() {
         const { redArr, blueArr } = this.state;
         if(redArr.length === 0 || blueArr.length === 0) return;
+
         Taro.navigateTo({
             url: '/pages/index/index'
         })
     }
 
     render () {
+        console.log(this.props);
         const { red, blue, redArr, blueArr } = this.state;
         const accounts = mathAccount(redArr.length, 5)*mathAccount(blueArr.length, 2);
         return (
