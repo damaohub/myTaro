@@ -5,7 +5,6 @@ export default {
   state: {
     // access_token: Taro.getStorageSync('access_token'),
     data: [],
-    test: 'test123'
   },
 
   effects: {

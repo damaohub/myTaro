@@ -1,22 +1,23 @@
 import Taro from '@tarojs/taro';
 
-const baseUrl ='';
+const baseUrl ='http://127.0.0.1:7001/';
 const noConsole = false;
 const request_data = {
   platform: 'wap',
   rent_mode: 2,
 };
 
-type Method = "GET" | "OPTIONS" | "HEAD" | "POST" | "PUT" | "DELETE" | "TRACE" | "CONNECT" | undefined;
+declare  type Method = "GET" | "OPTIONS" | "HEAD" | "POST" | "PUT" | "DELETE" | "TRACE" | "CONNECT" ;
 
 interface Options {
+  url:string;
   method:Method | any;
   data?:object;
   [propName: string]: any;
 }
 
   
-export default (options:Options = { method: 'GET' }) => {
+export default (options:Options = {url: '', method: 'GET' }) => {
   if (!noConsole) {
     console.log(
       `${new Date().toLocaleString()}【 M=${options.url} 】P=${JSON.stringify(

@@ -1,5 +1,6 @@
 /* === Toolbar === */
 @import url("../app-vars.less");
+@import "./minix.less";
 
 @tabbar-link-active-bg-color: transparent;
 @tabbar-label-text-transform: none;
@@ -219,7 +220,7 @@
 // Transitions
 .toolbar-transitioning,
 .navbar-transitioning + .toolbar,
-.navbar-transitioning ~ * .toolbar {
+.navbar-transitioning ~  .toolbar {
   transition-duration: @toolbar-hide-show-transition-duration
 }
 
@@ -228,7 +229,7 @@
   ~ * {
     @page-toolbar-bottom-offset: @toolbar-height;
   }
-  &.tabbar-labels ~ * {
+  &.tabbar-labels ~ view, &.tabbar-labels ~ text, &.tabbar-labels ~ div {
     @page-toolbar-bottom-offset: @tabbar-labels-height;
   }
 }
@@ -252,7 +253,7 @@
 }
 
 .navbar ~ .toolbar-top,
-.navbar ~ * .toolbar-top,
+.navbar ~  .toolbar-top,
 .navbar ~ .page:not(.no-navbar) .toolbar-top {
   top: @navbar-height;
   &.toolbar-hidden {
@@ -264,11 +265,11 @@
 }
 .navbar-hidden + .toolbar-top:not(.toolbar-hidden),
 
-.navbar-hidden ~ * .toolbar-top:not(.toolbar-hidden) {
+.navbar-hidden ~ .toolbar-top:not(.toolbar-hidden) {
   transform: translate3d(0, calc(-1 * @navbar-height), 0);
 }
 .navbar-large-hidden + .toolbar-top:not(.toolbar-hidden),
 
-.navbar-large-hidden ~ * .toolbar-top:not(.toolbar-hidden) {
+.navbar-large-hidden ~ .toolbar-top:not(.toolbar-hidden) {
   transform: translate3d(0, calc(-1 * (@navbar-height + @navbar-large-title-height)), 0);
 }

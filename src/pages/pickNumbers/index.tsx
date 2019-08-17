@@ -4,9 +4,9 @@ import { connect } from '@tarojs/redux';
 import { mathAccount } from '../../utils/utils';
 import './pickNumber.less';
 
-const getArray = (len:number):{num:string, active:boolean}[] => {
+const getObjArray = (len:number):{num:string, active?:boolean}[] => {
     if (len == 0) return [{num: '0', active: false}]; 
-    const arr:{num:string,active:false}[] = [];
+    const arr:{num:string,active?:boolean}[] = [];
     for(let i = 1; i < len+1; i ++ ) {
         const str:string  =  ('' + i).length < 2 ? '0' + i : i.toString();
         arr.push({num: str, active: false});
@@ -14,17 +14,30 @@ const getArray = (len:number):{num:string, active:boolean}[] => {
     return arr;
 }
 
-@connect(({ common, loading }) => ({
-    ...common,
+const getItemArray = (sorce:{num:string, active?:boolean}[]):string[] => {
+    const Arr:string[] = []
+    for(let i = 0; i <sorce.length; i++){
+        if(sorce[i].active) Arr.push(sorce[i].num)
+    }
+    return Arr;
+}
+
+interface IProps{
+    dispatch: any,
+    numb:any
+}
+
+@connect(({ numb, loading }) => ({
+    numb,
     ...loading,
   }))
-export default class Index extends Component {
+export default class Index extends Component<IProps> {
     config: Config = {
         navigationBarTitleText: '首页'
     }
     state = {
-        red: getArray(35),
-        blue: getArray(12),
+        red: getObjArray(35),
+        blue: getObjArray(12),
         redArr: [],
         blueArr: []
     }
@@ -45,10 +58,9 @@ export default class Index extends Component {
             red[i].active = !red[i].active;
             this.setState({
                 red
-            }, () => {
-                const Arr = red.filter(r => r.active);
+            }, () => {         
                 this.setState({
-                    redArr:Arr
+                    redArr:getItemArray(red)
                 })
             })
             break;
@@ -57,9 +69,8 @@ export default class Index extends Component {
             this.setState({
                 blue
             }, () => {
-                const Arr = blue.filter(r => r.active);
                 this.setState({
-                    blueArr:Arr
+                    blueArr:getItemArray(blue)
                 })
             })
             break; 
@@ -67,25 +78,39 @@ export default class Index extends Component {
     }
 
     onClear() {
+       
         this.setState({
-            red: getArray(35),
-            blue: getArray(12),
+            red: getObjArray(35),
+            blue: getObjArray(12),
             redArr: [],
             blueArr: []
         })
+       
     }
 
     onSure() {
         const { redArr, blueArr } = this.state;
+        const {dispatch} = this.props;
         if(redArr.length === 0 || blueArr.length === 0) return;
-
-        Taro.navigateTo({
-            url: '/pages/index/index'
-        })
+        dispatch({
+            type: 'numb/saveArr',
+            payload: { redArr, blueArr}
+        }).then(
+            () => {
+                Taro.showToast({
+                    title:"已录入",
+                    icon: 'success'
+                })
+              Taro.redirectTo({
+                url: '/pages/index/index'
+            })
+           
+            }
+        )  
+        
     }
 
     render () {
-        console.log(this.props);
         const { red, blue, redArr, blueArr } = this.state;
         const accounts = mathAccount(redArr.length, 5)*mathAccount(blueArr.length, 2);
         return (

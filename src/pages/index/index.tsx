@@ -25,13 +25,17 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  goNumber() {
+    Taro.navigateTo({ url: '/pages/pickNumbers/index' });
+  }
+
   render () {
     return (
       <View className='index page'>
         <View className="padding-half bg-color-white"><Text>19082期</Text><Text>07-17（周三）</Text><Text>20:00截至购买</Text></View>
         <View className="row margin-half">
-            <Button className="button col-50" type="primary">手动输入</Button>
-            <Button className="button col-50" type="primary">图像输入</Button> 
+            <Button onClick={() => {this.goNumber()}} type="primary" className="col-50" size="mini" plain> + 手动输入</Button>
+            <Button type="warn" className="col-50" size="mini"> + 图像输入</Button>  
         </View> 
         <View className="card">
           <View className="card-content">

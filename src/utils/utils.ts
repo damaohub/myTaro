@@ -12,3 +12,11 @@ export function mathAccount(m:number, n:number) {
     }
     return result;
 }
+
+export function nowDate(){
+    let myDate=new Date(),
+        year=myDate.getFullYear(),
+        month=myDate.getMonth()+1,
+        date=myDate.getDate();
+   return year+'-'+this.formatNum(month)+'-'+this.formatNum(date);
+}

@@ -1,4 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro'
+import '@tarojs/async-await'
 import Index from './pages/index'
 import { Provider } from '@tarojs/redux';
 import models from './models';
@@ -7,7 +8,7 @@ import dva from './utils/dva';
 import './app.less'
 
 const dvaApp = dva.createApp({
-  initialState: {test:'test11'},
+  initialState: {},
   models: models,
 });
 const store = dvaApp.getStore();
@@ -30,8 +31,9 @@ class App extends Component {
    */
   config: Config = {
     pages: [
+      'pages/index/index',
       'pages/pickNumbers/index',
-      'pages/index/index'
+      
     ],
     window: {
       backgroundTextStyle: 'light',

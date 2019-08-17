@@ -7,7 +7,7 @@ let app:any;
 let store:any;
 let dispatch:any;
 let registered:boolean;
-let global:{registered?:boolean};
+
 function createApp(opt) {
   // redux日志
   // opt.onAction = [createLogger()];
@@ -16,10 +16,9 @@ function createApp(opt) {
 
   // 适配支付宝小程序
   if (Taro.getEnv() === Taro.ENV_TYPE.ALIPAY) {
-    global = {};
   }
 
-  if (registered) opt.models.forEach(model => app.model(model));
+  if (!registered) opt.models.forEach(model => app.model(model));
   registered = true;
   app.start();
 
