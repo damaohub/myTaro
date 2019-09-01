@@ -11,10 +11,10 @@ export default {
     *saveArr({payload}, {put, call}) {
         const res = yield call(pickNumberApi.getData, {payload});
         console.log(res)
-        // yield put({
-        //     type:'save',
-        //     payload
-        // })
+        yield put({
+            type:'save',
+            payload
+        })
     },
   },
 
