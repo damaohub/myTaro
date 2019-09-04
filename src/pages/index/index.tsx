@@ -4,7 +4,6 @@ import { connect } from '@tarojs/redux';
 import { getNextEvent, getNextOpenTime } from '../../utils/utils';
 import './index.less'
 import dlt from '../../assets/icons/dlt.png'
-import { object } from 'prop-types';
 
 interface IProps{
   dispatch?: any;
@@ -42,8 +41,8 @@ export default class Index extends Component<IProps> {
   state ={
     lastEventName: '',
     lastOpenTime: {},
-    selector: ['未开奖', '未中奖', '已开奖'],
-    selectorChecked: '未开奖',
+    selector: ['等待开奖', '未中奖', '已中奖'],
+    selectorChecked: '等待开奖',
   }
   componentWillMount () { }
 
