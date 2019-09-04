@@ -1,8 +1,9 @@
 import Request from '../../utils/request'
 
-export const getData = () => {
+export const checkDlt = (data:{redArr:[], blueArr:[], term:string }) => {
   return Request({
-    url:'test',
-    method: 'GET', 
+    url:'checkdlt',
+    method: 'POST',
+    data
   })
 }

@@ -1,7 +1,8 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, Text, Button } from '@tarojs/components';
+import { View, Text, Button, Picker, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { mathAccount } from '../../utils/utils';
+import { getNextEvent, mathAccount } from '../../utils/utils';
+import dlt from '../../assets/icons/dlt.png';
 import './pickNumber.less';
 
 const getObjArray = (len:number):{num:string, active?:boolean}[] => {
@@ -23,11 +24,12 @@ const getItemArray = (sorce:{num:string, active?:boolean}[]):string[] => {
 }
 
 interface IProps{
-    dispatch: any,
-    numb:any
+    dispatch?: any;
+  [propName: string]: any;
 }
 
-@connect(({ numb, loading }) => ({
+@connect(({common, numb, loading }) => ({
+    common,
     numb,
     ...loading,
   }))
@@ -39,17 +41,40 @@ export default class Index extends Component<IProps> {
         red: getObjArray(35),
         blue: getObjArray(12),
         redArr: [],
-        blueArr: []
+        blueArr: [],
+        selector: [],
+        selectorChecked: '',
     }
     componentWillMount () { }
 
-    componentDidMount () { }
+    componentDidMount () {
+    const {dispatch} = this.props;
+        dispatch({
+            type: 'common/getDlt',
+        }).then(() => {
+            const {common:{ dlt }} = this.props;
+            const time = dlt.lottery.openTime.time;
+            const eventNames = dlt.eventName;
+            const fEvent = getNextEvent(parseInt(eventNames[0], 10),time).toString();
+            eventNames.unshift(fEvent);
+            this.setState({
+                selectorChecked: fEvent,
+                selector:eventNames
+            })
+        })
+    }
   
     componentWillUnmount () { }
   
     componentDidShow () { }
   
     componentDidHide () { }
+
+    onChange = e => {
+        this.setState({
+          selectorChecked: this.state.selector[e.detail.value]
+        })
+      }
 
     onCheck = (i:number,type:number):any => {
         const {red, blue} = this.state;
@@ -89,12 +114,18 @@ export default class Index extends Component<IProps> {
     }
 
     onSure() {
-        const { redArr, blueArr } = this.state;
+        const { redArr, blueArr, selectorChecked } = this.state;
         const {dispatch} = this.props;
-        if(redArr.length === 0 || blueArr.length === 0) return;
+        if(redArr.length === 0 || blueArr.length === 0 || selectorChecked==='') {
+            Taro.showToast({
+                title:"请输入数字或期数",
+                icon:'none'
+            })
+            return;
+        };
         dispatch({
             type: 'numb/saveArr',
-            payload: { redArr, blueArr}
+            payload: { redArr, blueArr, term: selectorChecked}
         }).then(
             () => {
                 Taro.showToast({
@@ -115,8 +146,32 @@ export default class Index extends Component<IProps> {
         const accounts = mathAccount(redArr.length, 5)*mathAccount(blueArr.length, 2);
         return (
             <View className='pick-numbers page'>
-                <View className="padding-half bg-color-white"><Text>19082期</Text><Text>07-17（周三）</Text><Text>20:00截至购买</Text></View>
-                <View className="padding-half bg-color-white margin-vertical-half">19082期 开奖结果：04 13 20 26 28 03 12</View>
+                {/* <View className="padding-half bg-color-white"><Text>19082期</Text><Text>07-17（周三）</Text><Text>20:00截至购买</Text></View> */}
+                <View className="list  margin-vertical-half">
+                    <View className="ul">
+                        <View className="li">
+                            <Picker value={0} mode='selector' range={this.state.selector} onChange={this.onChange}>
+                                <View className="item-link item-content">
+                                    <View className="item-media">
+                                        <Image src={dlt} mode="widthFix" style="width:20px;"/>
+                                    </View>
+                                    <View className="item-inner">
+                                        <View className="item-title">期数：</View>
+                                        <View className="item-after">{this.state.selectorChecked}</View>
+                                    </View>
+                                </View>
+                            </Picker>
+                        </View>
+                    </View>
+                </View>
+                
+                {/* <View className="padding-half bg-color-white margin-vertical-half">
+                    <Picker value={0} mode='selector' range={this.state.selector} onChange={this.onChange}>
+                        <View className='picker'>
+                        期数（默认下一期）：{}
+                        </View>
+                    </Picker>
+                </View> */}
                 <View>
                     <View>至少选择5个红球， 2个蓝球</View>
                     <View className="row row-red per-6 justify-content-flex-start bg-color-white">

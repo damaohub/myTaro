@@ -1,19 +1,26 @@
-// import Taro from '@tarojs/taro';
+import Taro from '@tarojs/taro';
 import * as pickNumberApi from './service';
 export default {
   namespace: 'numb',
   state: {
     redArr:[],
-    blueArr:[]
+    blueArr:[],
+    term: ''
   },
 
   effects: {
-    *saveArr({payload}, {put, call}) {
-        const res = yield call(pickNumberApi.getData, {payload});
-        console.log(res)
+    *saveArr({payload}, {put, call, select}) {
+      const { list } = yield select(state => state.common);
+      const res = yield call(pickNumberApi.checkDlt, payload);
+      list.push({...payload, ...res})
         yield put({
             type:'save',
             payload
+        })
+        Taro.setStorageSync('list', list);
+        yield put({
+          type:'commom/add',
+          payload:list
         })
     },
   },

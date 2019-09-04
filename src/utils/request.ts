@@ -3,8 +3,6 @@ import Taro from '@tarojs/taro';
 const baseUrl ='http://127.0.0.1:7001/';
 const noConsole = false;
 const request_data = {
-  platform: 'wap',
-  rent_mode: 2,
 };
 
 declare  type Method = "GET" | "OPTIONS" | "HEAD" | "POST" | "PUT" | "DELETE" | "TRACE" | "CONNECT" ;
@@ -44,16 +42,14 @@ export default (options:Options = {url: '', method: 'GET' }) => {
           res.data
         );
       }
-      if (data.status !== 'ok') {
-        Taro.showToast({
-          title: `${res.data.error.message}~` || res.data.error.code,
-          icon: 'none',
-          mask: true,
-        });
-      }
       return data;
     } else {
-      throw new Error(`网络请求错误，状态码${statusCode}`);
+      Taro.showToast({
+        title: data.message ||`${statusCode}`,
+        icon: 'none',
+        mask: true,
+      });
+     
     }
-  });
+  }).catch((e) =>{throw new Error(e)});
 };
