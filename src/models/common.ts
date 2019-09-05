@@ -15,6 +15,12 @@ export default {
         type: 'save',
         payload: res
       })
+     },
+     *changeList({payload}, {put}) {
+      yield put({
+        type: 'save',
+        payload,
+      })
      }
   },
 
@@ -22,8 +28,8 @@ export default {
     save(state, { payload }) {
       return { ...state, ...payload };
     },
-    add(state, {payload}) {
-      return {...state, ...payload}
+    change(state, payload) {
+      return { ...state, ...payload };
     }
   },
 };

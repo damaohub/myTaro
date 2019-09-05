@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, Image, Button, Navigator, Picker  } from '@tarojs/components'
+import { View, Text, Image, Button } from '@tarojs/components'
 import { connect } from '@tarojs/redux';
 import { getNextEvent, getNextOpenTime } from '../../utils/utils';
 import './index.less'
@@ -10,16 +10,6 @@ interface IProps{
   [propName: string]: any;
 }
 
-const colorClass = (type) => {
-  switch(type) {
-    case 0:
-      return '';
-    case -1:
-      return 'color-green';
-    default:
-      return 'color-red';
-  }
-}
 
 @connect(({ common, loading }) => ({
   common,
@@ -41,38 +31,23 @@ export default class Index extends Component<IProps> {
   state ={
     lastEventName: '',
     lastOpenTime: {},
-    selector: ['等待开奖', '未中奖', '已中奖'],
-    selectorChecked: '等待开奖',
+    list:[]
   }
   componentWillMount () { }
 
   componentDidMount () {
-    const {dispatch} = this.props;
+    const {dispatch, common:{list}} = this.props;
     dispatch({
       type: 'common/getDlt',
     }).then(() => {
       const {common:{ dlt }} = this.props;
       this.setState({
         lastEventName: dlt.eventName[0],
-        lastOpenTime:dlt.lottery.openTime
+        lastOpenTime:dlt.lottery.openTime,
+        list
       })
     })
-    const list = this.props.common.list || [];
-    let losingList:object[] = [],
-        awardedList:object[] = [],
-        unawardedList:object[] = [];
-    list.length !==0 && list.map(item => {
-      switch (item.type) {
-        case -1:
-          losingList.push(item);
-          break;
-        case 0:
-          unawardedList.push(item);
-          break;
-        default:
-          awardedList.push(item);
-      }
-    })
+   
   }
 
   componentWillUnmount () { }
@@ -81,59 +56,129 @@ export default class Index extends Component<IProps> {
 
   componentDidHide () { }
 
-  onChange = e => {
-    this.setState({
-      selectorChecked: this.state.selector[e.detail.value]
-    })
-  }
+ 
 
-  goNumber() {
+  onGoNumber() {
     Taro.navigateTo({ url: '/pages/pickNumbers/index' });
   }
 
+  onShowNumber(numbers) {
+    const tile = `前：${numbers.redArr.join(' ')} \n
+                  后：${numbers.blueArr.join(' ')}`
+    Taro.showToast({
+       title: tile,
+      icon: 'none',
+      duration: 3000
+    })
+  }
+
+  onDeleteItem(idx:string) {
+    Taro.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      success: (res) => {
+        if(res.confirm) {
+          const list:{id:string}[] = this.state.list;
+          const len = list.length;
+          if(len === 0) return;
+          const newList:{id:string}[] = []
+          for(let i = 0; i<len; i++) {
+            console.log(list[i].id)
+            if(list[i].id !== idx) {
+              newList.push(list[i])
+            }
+          }
+          this.setState({
+            list: newList
+          },() => {
+            Taro.setStorageSync('list', newList);
+            const {dispatch} = this.props
+            dispatch({
+              type:'common/changeList',
+              payload: {list: newList}
+            })
+            Taro.showToast({
+              title: '已删除'
+            })
+          })
+        }else if (res.cancel) {
+          return
+        }
+      }
+    })
+
+  }
+
+  onClear() {
+    Taro.showModal({
+      title: '提示',
+      content: '是否要全部删除？',
+      success: (res) => {
+        if(res.confirm) {
+          const list = [];
+          this.setState({
+            list
+          },() => {
+            Taro.setStorageSync('list', list);
+            const {dispatch} = this.props
+            dispatch({
+              type:'common/changeList',
+              payload: {list}
+            })
+            Taro.showToast({
+              title: '已清空'
+            })
+          })
+        } else if(res.cancel) {
+          return
+        }
+      }
+    })
+  }
+
   render () {
-    const{ lastEventName, lastOpenTime } = this.state;
-    const list = this.props.common.list || [];
+    const{ lastEventName, lastOpenTime, list } = this.state;
     return (
       <View className='index page'>
         <View className="padding-half bg-color-white"><Text>{getNextEvent(parseInt(lastEventName, 10),lastOpenTime['time'])}期 </Text><Text>{getNextOpenTime(lastOpenTime['time'])}</Text><Text> 20:00截至购买</Text></View>
         <View className="row margin-half">
-            <Button onClick={() => {this.goNumber()}} type="primary" className="col-50" size="mini" plain> + 选号输入</Button>
+            <Button onClick={() => {this.onGoNumber()}} type="primary" className="col-50" size="mini" plain> + 选号输入</Button>
             <Button type="primary" className="col-50" size="mini" plain> + 图片识别</Button>  
         </View> 
         <View className="card">
           <View className="card-header no-padding-vertical" style="display:block;min-height: auto;">
-            
-              <View className="list links-list">
-                  <View className="ul">
-                  <Picker value={0} mode='selector' range={this.state.selector} onChange={this.onChange}>
-                    <View className="li">
-                      <View className="a">{this.state.selectorChecked}</View>
-                    </View>
-                    </Picker>
-                  </View>
-              </View>
-            
+              等待开奖<Text className="color-gray" style="font-size: 12px;">（走上人生巅峰就靠这一波了~~）</Text>
           </View>
           <View className="card-content">
-            <View className="list media-list chevron-center no-safe-areas">
+            <View className="list media-list no-safe-areas">
             
               <View className="ul">
                 {
-                  list.map((item, index) => (
+                  list.length === 0 ? 
+                  <View className="li">
+                    <View className="item-content">
+                      <View className="item-inner">
+                        <View className="item-text">空空如也...</View>
+                      </View>
+                    </View>
+                    </View>:
+                  list.map((item:{redArr:[],blueArr:[], lottery:{openTime_fmt:string},accounts:number, time:string, term:string,id:string}, index) => (
                     <View className="li" key={`${index}`}>
-                    <Navigator className="item-content">
+                    <View className="item-content">
                       <View className="item-inner">
                         <View className="item-title-row">
-                          <View className="item-title">
+                          <View className="item-title" onClick={() => this.onShowNumber(item)}>
                             <Text className="color-red">{item.redArr.join(' ')}</Text> <Text className="color-blue">{item.blueArr.join(' ')}</Text>
                           </View>
                           <View className="item-after"><Image src={dlt} mode="widthFix" style="width:20px;"/>{item.term}</View>
                         </View>
-                        <View className={"item-subtitle " + colorClass(item.type)}>{item.level}</View>
-                        <View className="item-text">{item.lottery.openTime_fmt}开奖</View>
+                        <View className="item-subtitle"><Text>{item.lottery.openTime_fmt}开奖</Text> <Text className="link float-right" onClick={() => {this.onDeleteItem(item.id)}}>删除</Text></View>
+                        <View className="item-text display-block">
+                          <Text>{item.accounts === 1 ?'单式':'复式'}</Text><Text style="margin:0 8px">{item.accounts}注</Text> <Text>{item.accounts*2}元</Text>
+                          <Text className="color-gray float-right" style="font-size: 12px;">{item.time}</Text>
+                        </View>
                       </View>
-                    </Navigator>
+                    </View>
                     </View>
                   ))
                 }
@@ -144,8 +189,8 @@ export default class Index extends Component<IProps> {
             </View>
           </View>
           <View className="card-footer">
-            <Text className="link">什么的</Text>
-            <Text className="link" style={"cursor: pointer;"}>清空</Text>
+            <Text className="link">中奖纪录</Text>
+            <Text className="link" style={"cursor: pointer;"} onClick={() => {this.onClear()}}>清空</Text>
           </View>
         </View>
        

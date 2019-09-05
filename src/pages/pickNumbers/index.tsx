@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro';
 import { View, Text, Button, Picker, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-import { getNextEvent, mathAccount } from '../../utils/utils';
+import { getNextEvent, mathAccount, getUUID, formatTime } from '../../utils/utils';
 import dlt from '../../assets/icons/dlt.png';
 import './pickNumber.less';
 
@@ -113,7 +113,7 @@ export default class Index extends Component<IProps> {
        
     }
 
-    onSure() {
+    onSure(accounts:number) {
         const { redArr, blueArr, selectorChecked } = this.state;
         const {dispatch} = this.props;
         if(redArr.length === 0 || blueArr.length === 0 || selectorChecked==='') {
@@ -125,16 +125,29 @@ export default class Index extends Component<IProps> {
         };
         dispatch({
             type: 'numb/saveArr',
-            payload: { redArr, blueArr, term: selectorChecked}
+            payload: { redArr, blueArr, term: selectorChecked, accounts, time: formatTime(), id: getUUID()}
         }).then(
             () => {
-                Taro.showToast({
-                    title:"已录入",
-                    icon: 'success'
-                })
-              Taro.redirectTo({
-                url: '/pages/index/index'
-            })
+                const{ numb: {item} } = this.props;
+                if(item) {
+                    const cont = item.type === 0 ? '又攒人品了 (* ￣︿￣) ' : `奖金：${item.allmoney}元 ^O^`;
+                    Taro.showModal({
+                        title: item.level,
+                        content: cont,
+                        showCancel: false,
+                        complete: ()=> {
+                            dispatch({
+                                type:'numb/reset'
+                            })
+                        }
+                    })
+                } else {
+                    Taro.redirectTo({
+                        url: '/pages/index/index'
+                    })
+                }
+             
+             
            
             }
         )  
@@ -165,13 +178,6 @@ export default class Index extends Component<IProps> {
                     </View>
                 </View>
                 
-                {/* <View className="padding-half bg-color-white margin-vertical-half">
-                    <Picker value={0} mode='selector' range={this.state.selector} onChange={this.onChange}>
-                        <View className='picker'>
-                        期数（默认下一期）：{}
-                        </View>
-                    </Picker>
-                </View> */}
                 <View>
                     <View>至少选择5个红球， 2个蓝球</View>
                     <View className="row row-red per-6 justify-content-flex-start bg-color-white">
@@ -196,7 +202,7 @@ export default class Index extends Component<IProps> {
                     <View className="toolbar-inner no-padding-right">
                         <View onClick={() => this.onClear()} className="link">清空</View>
                         <View>共{accounts}注，{accounts*2}元</View>
-                        <View onClick={() => this.onSure()} className="align-self-flex-end"> <Button type="warn" disabled={accounts === 0? true: false}>确定</Button></View>   
+                        <View onClick={() => this.onSure(accounts)} className="align-self-flex-end"> <Button type="warn" disabled={accounts === 0? true: false}>确定</Button></View>   
                     </View>
                 </View>
             </View>

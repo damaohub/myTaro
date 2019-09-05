@@ -22,8 +22,15 @@ export function formatTime(time?:number){
     let myDate = time ? new Date(time) : new Date(),
         year=myDate.getFullYear(),
         month=myDate.getMonth()+1,
-        date=myDate.getDate();
-   return year+'-' + formatNum(month)+'-'+ formatNum(date);
+        date=myDate.getDate(),
+        hour=myDate.getHours(),
+        minute=myDate.getMinutes(),
+        second=myDate.getSeconds();
+   return year+'-' + formatNum(month)+'-'+ formatNum(date)+ ' ' + formatNum(hour)+':'+formatNum(minute)+":"+formatNum(second);
+}
+
+export function getUUID() {
+   return  new Date().getTime() + Math.random().toString(36).substr(2)
 }
 
 export function getNextEvent(event:number, time:number) {

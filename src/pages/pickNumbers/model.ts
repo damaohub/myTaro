@@ -5,24 +5,35 @@ export default {
   state: {
     redArr:[],
     blueArr:[],
-    term: ''
+    term: '',
+    item: null
   },
 
   effects: {
     *saveArr({payload}, {put, call, select}) {
-      const { list } = yield select(state => state.common);
       const res = yield call(pickNumberApi.checkDlt, payload);
-      list.push({...payload, ...res})
-        yield put({
-            type:'save',
-            payload
-        })
+      if(res.type === -1){
+        const { list } = yield select(state => state.common);
+        list.unshift({...payload, ...res})
         Taro.setStorageSync('list', list);
         yield put({
-          type:'commom/add',
+          type:'commom/save',
           payload:list
         })
+      } else {
+        yield put({
+          type:'save',
+          payload:{ ...payload, item: res }
+      })
+      }  
     },
+
+    *reset(_:any, {put}) {
+      yield put({
+        type: 'save',
+        payload:{redArr:[], blueArr:[], term:'', item: null, accounts: undefined}
+      })
+    }
   },
 
   reducers: {
