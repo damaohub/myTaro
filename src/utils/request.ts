@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro';
 
-const baseUrl ='http://127.0.0.1:7001/';
+// eslint-disable-next-line
+const baseUrl = HOST + '/';
 const noConsole = false;
 const request_data = {
 };
