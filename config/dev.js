@@ -1,23 +1,23 @@
-const isH5 = process.env.CLIENT_ENV === 'h5'
-const HOST = '"http://127.0.0.1:7001"'
+const isH5 = process.env.TARO_ENV === 'h5'
+const HOST = 'http://127.0.0.1:7001'
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
   env: {
     NODE_ENV: '"development"'
   },
   defineConstants: {
-    HOST: isH5 ? '"/api"' : HOST,
+    HOST: isH5 ? '"/api/"' : JSON.stringify(HOST),
   },
   weapp: {},
   h5: {
-    devService: {
+    devServer: {
       proxy: {
-        '/api/': {
-          target: JSON.parse(HOST),
+        '/api': {
+          target: HOST,
+          changeOrigin: true,  //是否跨域
           pathRewrite: {
-            '^/api/': '/'
+            '^/api': ''
           },
-          changeOrigin: true
         },
       }
     }

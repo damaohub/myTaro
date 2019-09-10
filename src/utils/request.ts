@@ -1,7 +1,18 @@
 import Taro from '@tarojs/taro';
 
-// eslint-disable-next-line
-const baseUrl = HOST + '/';
+/**
+ * NOTE HOST 是在 config 中通过 defineConstants 配置的
+ * 可在代码中直接引用，但是总报错
+ */
+
+/* tslint:disable */
+/* eslint-disable */
+const baseUrl = HOST;
+/* eslint-enable */
+/* tslint:enable */
+
+
+
 const noConsole = false;
 const request_data = {
 };
