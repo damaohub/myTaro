@@ -6,7 +6,7 @@ module.exports = {
     NODE_ENV: '"development"'
   },
   defineConstants: {
-    HOST: isH5 ? '"/api/"' : JSON.stringify(HOST),
+    HOST: isH5 ? '"/api"' : JSON.stringify(HOST),
   },
   weapp: {},
   h5: {

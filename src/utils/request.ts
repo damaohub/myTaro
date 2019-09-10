@@ -2,12 +2,12 @@ import Taro from '@tarojs/taro';
 
 /**
  * NOTE HOST 是在 config 中通过 defineConstants 配置的
- * 可在代码中直接引用，但是总报错
+ * 可在代码中直接引用，但是编辑器一般会报错
  */
 
 /* tslint:disable */
 /* eslint-disable */
-const baseUrl = HOST;
+const baseUrl = HOST + "/";
 /* eslint-enable */
 /* tslint:enable */
 
