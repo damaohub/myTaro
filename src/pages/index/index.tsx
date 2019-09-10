@@ -83,7 +83,6 @@ export default class Index extends Component<IProps> {
           if(len === 0) return;
           const newList:{id:string}[] = []
           for(let i = 0; i<len; i++) {
-            console.log(list[i].id)
             if(list[i].id !== idx) {
               newList.push(list[i])
             }
