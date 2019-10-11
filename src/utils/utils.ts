@@ -52,7 +52,7 @@ export function getNextOpenTime(time:number) {
     let oldDate = new Date(time),
         day = oldDate.getDay();
     const dayArr:string[] = ['日', '一', '二', '三', '四', '五', '六'];
-    const nextTime = day === 3? time +257400000: time +171000000 ;  // 2*24*60*60*1000-30*60*1000 = 171000000; 3*24*60*60*1000-30*60*1000 = 257400000
+    const nextTime = day === 3? time +257400000: time +171000000 ;  // 2*24*60*60*1000-25*60*1000 = 171000000; 3*24*60*60*1000-25*60*1000 = 257400000
     let nextDateObj = new Date(nextTime),
         nextMonth = nextDateObj.getMonth() + 1,
         nextDate = nextDateObj.getDate(),
